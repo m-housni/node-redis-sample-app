@@ -32,6 +32,7 @@
     "better-config": "^1.2.3",
     "connect-redis": "^5.1.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "express-validator": "^6.10.0",

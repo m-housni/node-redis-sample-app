@@ -1,3 +1,4 @@
+require('dotenv').config();
 const fetch = require('node-fetch');
 const router = require('express').Router();
 const { param, query } = require('express-validator');
@@ -9,6 +10,11 @@ const CACHE_TIME = 60 * 60; // An hour in seconds.
 const redisClient = redis.getClient();
 
 const getWeatherKey = (locationId) => redis.getKeyName('weather', locationId);
+
+// Ensure WEATHER_API_KEY is set
+if (!process.env.WEATHER_API_KEY) {
+  throw new Error('WEATHER_API_KEY environment variable is not set');
+}
 
 // Get location by ID, optionally with extra details.
 router.get(
@@ -222,11 +228,12 @@ router.get(
 
         return res.status(200).json(weatherJSON);
       }
-      
+
       return res.status(400).send('Bad request: check your WEATHER_API_KEY!');
     }
 
-    
+    // If coordinates are not found in Redis
+    res.status(404).send('Location not found');
   },
 );
 
