@@ -2,7 +2,45 @@
 
 The project involves developing a social network application where users can "check in" at various locations and provide star ratings (0 to 5) based on their experiences. The application leverages Redis as both a data store and a cache to manage data efficiently. The core entities in the application are Users, Locations, and Checkins, each mapped to Redis data types for optimal storage and retrieval. The application will also include an API to interact with the data and support asynchronous processing for real-time updates.
 
-![image](https://github.com/user-attachments/assets/c2610728-73e9-4266-af0e-d0aa78a62326)
+```mermaid
+%%{init: {'theme': 'neutral', 'themeVariables': { 'fontSize': '12px'}}}%%
+
+graph TD
+    subgraph Core_Entities
+        U["User<br/>Redis Hash<br/>- User ID<br/>- Name/Email<br/>- Encrypted Password<br/>- Total Checkins<br/>- Last Checkin TS/Location ID"]
+        L["Location<br/>Redis Hash (Summary)<br/>- Location ID<br/>- Category<br/>- Coordinates<br/>- Checkins/Stars/Avg<br/>Redis JSON (Details)<br/>- Full details<br/>- Nested objects"]
+        C["Checkin<br/>Redis Stream Entry<br/>- User ID<br/>- Location ID<br/>- Stars<br/>- Redis TS"]
+    end
+
+    subgraph Services
+        A["Auth Service<br/>Manages sessions<br/>Redis Session Store"]
+        CR["Checkin Receiver<br/>HTTP POST endpoint<br/>Writes to Stream"]
+        CP["Checkin Processor<br/>Reads from Stream<br/>Updates User/Location"]
+        API["API Server<br/>Exposes user/location data"]
+        DL["Data Loader<br/>Initial sample data"]
+    end
+
+    subgraph Data_Storage
+        R["Redis Server<br/>(Docker Container)<br/>- Hashes<br/>- JSON<br/>- Streams"]
+    end
+
+    User -- POST Checkin --> CR
+    CR -- Append --> C
+    CP -- Consume --> C
+    CP -- Update --> U
+    CP -- Update --> L
+    API -- Read --> U
+    API -- Read --> L
+    A -- Session Data --> R
+    DL --> R
+
+    classDef entity fill:#e1f5fe,stroke:#039be5;
+    classDef service fill:#f0f4c3,stroke:#c0ca33;
+    classDef storage fill:#ffcdd2,stroke:#e53935;
+    class U,L,C entity
+    class A,CR,CP,API,DL service
+    class R storage
+```
 
 ### Key Features and Specifications
 
