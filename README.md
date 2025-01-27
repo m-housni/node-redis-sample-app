@@ -2,8 +2,7 @@
 
 The project involves developing a social network application where users can "check in" at various locations and provide star ratings (0 to 5) based on their experiences. The application leverages Redis as both a data store and a cache to manage data efficiently. The core entities in the application are Users, Locations, and Checkins, each mapped to Redis data types for optimal storage and retrieval. The application will also include an API to interact with the data and support asynchronous processing for real-time updates.
 
-![image](https://github.com/user-attachments/assets/cada88c1-31bb-4993-af6d-7609c4523089)
-![image](https://github.com/user-attachments/assets/1c1f28a2-9ad0-4584-a0fd-48daf9224328)
+![image](https://github.com/user-attachments/assets/c2610728-73e9-4266-af0e-d0aa78a62326)
 
 ### Key Features and Specifications
 
